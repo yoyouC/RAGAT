@@ -272,7 +272,9 @@ class Runner(object):
             'best_val': self.best_val,
             'best_epoch': self.best_epoch,
             'optimizer': self.optimizer.state_dict(),
-            'args': vars(self.p)
+            'args': vars(self.p),
+            'entity2id': self.ent2id,
+            'relation2id': self.rel2id
         }
         torch.save(state, save_path)
 
