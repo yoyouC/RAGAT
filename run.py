@@ -444,14 +444,14 @@ class Runner(object):
             val_results['mrr'] = 0
             for epoch in range(self.p.max_epochs):
                 train_loss = self.run_epoch(epoch, val_mrr)
-                # if ((epoch + 1) % 10 == 0):
-                val_results = self.evaluate('valid', epoch)
+                if ((epoch + 1) % self.p.valid_epoch == 0):
+                    val_results = self.evaluate('valid', epoch)
 
-                if val_results['mrr'] > self.best_val_mrr:
-                    self.best_val = val_results
-                    self.best_val_mrr = val_results['mrr']
-                    self.best_epoch = epoch
-                    self.save_model(save_path)
+                    if val_results['mrr'] > self.best_val_mrr:
+                        self.best_val = val_results
+                        self.best_val_mrr = val_results['mrr']
+                        self.best_epoch = epoch
+                        self.save_model(save_path)
 
                 self.logger.info(
                     '[Epoch {}]: Training Loss: {:.5}, Best valid MRR: {:.5}\n\n'.format(epoch, train_loss,
@@ -526,6 +526,7 @@ if __name__ == '__main__':
     parser.add_argument('-ihid_drop', dest="ihid_drop", default=0.3, type=float, help='Dropout for Hidden layer')
     parser.add_argument('-attention', dest="att", help="Whether to use attention layer")
     parser.add_argument('-head_num', dest="head_num", default=2, type=int, help="Number of attention heads")
+    parser.add_argument('-valid_epoch', dest="valid_epoch", default=10, type=int, help="Number of epoch for validation")
 
     args = parser.parse_args()
 
